@@ -2,7 +2,7 @@
 
 import EncounterModal from "../components/EncounterModal";
 import EncounterCard from "../components/EncounterCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function Page() {
@@ -50,6 +50,10 @@ export default function Page() {
         setSelectedEncounter(encounter);
         openModal();
     }
+
+    useEffect(() => {
+        localStorage.setItem('encounter', JSON.stringify(encounters));
+    }, [encounters]);
 
     return (
         <div className="grid grid-cols-4 h-dvh relative overflow-auto">
