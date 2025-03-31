@@ -32,7 +32,8 @@ export default function RootLayout({
       >
         <UserProvider>
           <header className="flex bg-black">
-            <Link href="/" className="text-white p-3">home</Link>
+            <Link href="/" className="text-white p-3">Home</Link>
+            <Link href="/about" className="text-white p-3">About</Link>
           </header>
           {children}
         </UserProvider>
