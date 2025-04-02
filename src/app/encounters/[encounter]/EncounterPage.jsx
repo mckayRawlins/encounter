@@ -16,8 +16,10 @@ export default function EncounterPage() {
   if (!pageEncounter) return null;
 
   return (
-    <div className="p-5">
-      <h1 className="text-center">{pageEncounter.location.toUpperCase()}</h1>
+    <div>
+      <h1 className="bg-slate-200 p-3 rounded-t-lg">
+        {pageEncounter.location.toUpperCase()}
+      </h1>
       <p>
         <span className="font-bold">Notes for {pageEncounter.location}: </span>
         {pageEncounter.notes}
