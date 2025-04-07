@@ -16,10 +16,7 @@ export default async function Page() {
   return (
     <div className="p-5">
       <EncounterPage />
-      <div className="flex justify-evenly">
-        <p>Monsters</p>
-        <p>Traps</p>
-
+      <div>
         <MonsterSelector monsters={monsters} />
       </div>
     </div>
