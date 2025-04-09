@@ -10,6 +10,8 @@ export default function Page() {
   const [selectedEncounter, setSelectedEncounter] = useState({});
   const [encounters, setEncounters] = useLocalStorage("encounters", []);
 
+  
+
   function openModal() {
     setIsOpen(true);
   }
@@ -19,11 +21,12 @@ export default function Page() {
     setSelectedEncounter({});
   }
 
-  function updateEncounter(id, location, notes) {
+  function updateEncounter(id, location, notes, monsters) {
+    if (!id) return;
     setEncounters(
       encounters.map((encounter) => {
         if (encounter.id === id) {
-          return { id, location, notes };
+          return { id, location, notes, monsters };
         }
         return encounter;
       })
@@ -59,6 +62,7 @@ export default function Page() {
           key={encounter.id}
           location={encounter.location}
           notes={encounter.notes}
+          monsters={encounter.monsters}
           onEdit={() => editEncounter(encounter)}
           onDelete={() => deleteEncounter(encounter.id)}
         />
@@ -77,6 +81,7 @@ export default function Page() {
         updateEncounter={updateEncounter}
         encounter={selectedEncounter}
       />
+     
     </div>
   );
 }

@@ -8,12 +8,15 @@ async function fetchMonsters() {
   }
   const monsterData = await response.json();
   return monsterData.results;
+
+  
 }
 
 export default async function Page() {
   const monsters = await fetchMonsters();
 
   return (
+    
     <div className="p-5">
       <EncounterPage />
       <div>
