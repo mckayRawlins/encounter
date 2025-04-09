@@ -1,7 +1,7 @@
 "use client";
 
-import EncounterModal from "../components/EncounterModal";
-import EncounterCard from "../components/EncounterCard";
+import EncounterModal from "../_components/EncounterModal";
+import EncounterCard from "../_components/EncounterCard";
 import { useState } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 
