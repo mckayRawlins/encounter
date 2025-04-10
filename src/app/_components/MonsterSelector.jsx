@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import useLocalStorage from "@/app/hooks/useLocalStorage";
+import { useParams } from "next/navigation";
 
 export default function MonsterSelector({ monsters }) {
   const [selectedMonsterIndex, setSelectedMonsterIndex] = useState("");
@@ -40,7 +42,8 @@ export default function MonsterSelector({ monsters }) {
 
         const newMonster = {
           ...data,
-          id: Date.now(), // Unique ID for local storage
+          location: pageEncounter.location, //
+          id: Date.now(), // Unique ID for the monster
           index: monsters.length + 1, // Incremental index for display
         };
 
@@ -115,15 +118,18 @@ export default function MonsterSelector({ monsters }) {
 
       {selectedMonsters.length > 0 && (
         <ul>
-          {selectedMonsters.map((monster) => (
-            <li
-              key={monster.id}
-              onClick={() => handleMonsterClick(monster.id)}
-              className="cursor-pointer bg-gray-100 drop-shadow-md w-1/5 p-2 m-2 hover:bg-gray-200"
-            >
-              <span>{monster.name}</span>
-            </li>
-          ))}
+          {selectedMonsters
+            .filter((monster) => monster.location === pageEncounter.location)
+            .map((monster) => (
+              <li key={monster.id}>
+                <span
+                  onClick={() => handleMonsterClick(monster.id)}
+                  className="cursor-pointer text-blue-500 underline"
+                >
+                  {monster.name}
+                </span>
+              </li>
+            ))}
         </ul>
       )}
 
