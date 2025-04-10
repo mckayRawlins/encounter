@@ -2,15 +2,13 @@
 
 import EncounterModal from "../_components/EncounterModal";
 import EncounterCard from "../_components/EncounterCard";
-import { useState } from "react";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { useContext, useState } from "react";
+import { EncounterContext } from "../context/EncounterProvider";
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedEncounter, setSelectedEncounter] = useState({});
-  const [encounters, setEncounters] = useLocalStorage("encounters", []);
-
-  
+  const { encounters, setEncounters } = useContext(EncounterContext);
 
   function openModal() {
     setIsOpen(true);
@@ -37,7 +35,7 @@ export default function Page() {
     setEncounters([
       ...encounters,
       {
-        id: encounters.length + 1,
+        id: Date.now(),
         location,
         notes,
       },
@@ -81,7 +79,6 @@ export default function Page() {
         updateEncounter={updateEncounter}
         encounter={selectedEncounter}
       />
-     
     </div>
   );
 }

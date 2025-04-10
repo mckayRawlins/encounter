@@ -1,11 +1,12 @@
 "use client";
 
-import useLocalStorage from "@/app/hooks/useLocalStorage";
+import { EncounterContext } from "@/app/context/EncounterProvider";
 import { useParams } from "next/navigation";
+import { useContext } from "react";
 
 export default function EncounterPage() {
   const { encounter } = useParams();
-  const [encounters, setEncounters] = useLocalStorage("encounters", []);
+  const { encounters } = useContext(EncounterContext);
 
   const decodedEncounter = encounter ? decodeURIComponent(encounter) : "";
 
