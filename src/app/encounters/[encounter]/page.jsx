@@ -1,6 +1,6 @@
 
 import EncounterPage from "./EncounterPage";
-import MonsterSelector from "../../components/MonsterSelector";
+import MonsterSelector from "../../_components/MonsterSelector";
 
 
 async function fetchMonsters() {
