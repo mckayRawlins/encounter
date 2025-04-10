@@ -13,8 +13,6 @@ export default function EncounterPage() {
     (e) => e.location.toLowerCase() === decodedEncounter.toLowerCase()
   );
 
- 
-
   if (!pageEncounter) return null;
 
   return (

@@ -8,19 +8,18 @@ async function fetchMonsters() {
   }
   const monsterData = await response.json();
   return monsterData.results;
-
-  
 }
 
 export default async function Page() {
   const monsters = await fetchMonsters();
 
   return (
-    
     <div className="p-5">
-      <EncounterPage />
-      <div>
-        <MonsterSelector monsters={monsters} />
+      <div className="drop-shadow-md">
+        <EncounterPage />
+        <div>
+          <MonsterSelector monsters={monsters} />
+        </div>
       </div>
     </div>
   );

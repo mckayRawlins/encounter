@@ -5,11 +5,8 @@ import { useState, useEffect } from "react";
 export default function MonsterSelector({ monsters }) {
   const [selectedMonsterIndex, setSelectedMonsterIndex] = useState("");
   const [selectedMonsters, setSelectedMonsters] = useState([]);
-  const [modalData, setModalData] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-
-  
+  const [pageData, setPageData] = useState(null);
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   // Load saved monsters on mount
   useEffect(() => {
@@ -21,9 +18,6 @@ export default function MonsterSelector({ monsters }) {
     }
   }, []);
 
-
-
-
   const handleMonsterSelect = (event) => {
     setSelectedMonsterIndex(event.target.value);
   };
@@ -31,82 +25,77 @@ export default function MonsterSelector({ monsters }) {
   const handleAddMonster = async () => {
     if (!selectedMonsterIndex) return;
 
-   
-
     if (
       !selectedMonsters.some(
         (monster) => monster.index === selectedMonsterIndex
       )
     ) {
-
       try {
         // Fetch the full monster data from the API
         const response = await fetch(
           `https://www.dnd5eapi.co/api/monsters/${selectedMonsterIndex}`
         );
-     
+
         const data = await response.json();
 
-      
-      
-      const newMonster = {
-        ...data,
-        id: Date.now(), // Unique ID for local storage
-        index: monsters.length + 1, // Incremental index for display
-      };
+        const newMonster = {
+          ...data,
+          id: Date.now(), // Unique ID for local storage
+          index: monsters.length + 1, // Incremental index for display
+        };
 
-      const updatedMonsters = [...selectedMonsters, newMonster];
-      setSelectedMonsters(updatedMonsters);
+        const updatedMonsters = [...selectedMonsters, newMonster];
+        setSelectedMonsters(updatedMonsters);
 
-      // Save all monsters to local storage as a single object
-      const current = JSON.parse(localStorage.getItem("monsters") || "{}");
-      current[newMonster.id] = newMonster;
-      localStorage.setItem("monsters", JSON.stringify(current));
+        // Save all monsters to local storage as a single object
+        const current = JSON.parse(localStorage.getItem("monsters") || "{}");
+        current[newMonster.id] = newMonster;
+        localStorage.setItem("monsters", JSON.stringify(current));
 
-      setSelectedMonsterIndex("");
-    } catch (error) {
-      console.error("Error fetching monster data:", error);
+        setSelectedMonsterIndex("");
+      } catch (error) {
+        console.error("Error fetching monster data:", error);
+      }
     }
-  }
-};
+  };
 
-const handleMonsterClick = (monsterId) => {
-  const savedMonster = selectedMonsters.find(
-    (monster) => monster.id === monsterId
-  );
-  if (savedMonster) {
-    setModalData(savedMonster);
-    setIsModalOpen(true);
-  }
-};
+  const handleMonsterClick = (monsterId) => {
+    const savedMonster = selectedMonsters.find(
+      (monster) => monster.id === monsterId
+    );
+    if (savedMonster) {
+      setPageData(savedMonster);
+      setIsEditorOpen(true);
+    }
+  };
 
-  const handleModalDataChange = (field, value) => {
-    setModalData((prev) => ({
+  const handleMonsterDataChange = (field, value) => {
+    setPageData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  const saveModalData = () => {
-    if (modalData) {
+  const saveMonsterData = () => {
+    if (pageData) {
       const current = JSON.parse(localStorage.getItem("monsters") || "{}");
-      current[modalData.id] = modalData;
+      current[pageData.id] = pageData;
       localStorage.setItem("monsters", JSON.stringify(current));
       setSelectedMonsters(Object.values(current));
-      setIsModalOpen(false);
-      setModalData(null);
+      setIsEditorOpen(false);
+      setPageData(null);
     }
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setModalData(null);
+  const closeEditor = () => {
+    setIsEditorOpen(false);
+    setPageData(null);
   };
 
   return (
     <>
+      <label>Monsters: </label>
       <div>
-        <label>Monsters: </label>
         <select onChange={handleMonsterSelect} value={selectedMonsterIndex}>
           <option value="">--Select a monster--</option>
           {monsters.map((monster) => (
@@ -127,27 +116,26 @@ const handleMonsterClick = (monsterId) => {
       {selectedMonsters.length > 0 && (
         <ul>
           {selectedMonsters.map((monster) => (
-            <li key={monster.id}>
-              <span
-                onClick={() => handleMonsterClick(monster.id)}
-                className="cursor-pointer text-blue-500 underline"
-              >
-                {monster.name}
-              </span>
+            <li
+              key={monster.id}
+              onClick={() => handleMonsterClick(monster.id)}
+              className="cursor-pointer bg-gray-100 drop-shadow-md w-1/5 p-2 m-2 hover:bg-gray-200"
+            >
+              <span>{monster.name}</span>
             </li>
           ))}
         </ul>
       )}
 
-      {isModalOpen && modalData && (
-        <div className="modal">
-          <div className="modal-content">
+      {isEditorOpen && pageData && (
+        <div>
+          <div>
             <h2>
               <input
                 type="text"
-                value={modalData.name || ""}
+                value={pageData.name || ""}
                 onChange={(e) =>
-                  handleModalDataChange("name", e.target.value)
+                  handleMonsterDataChange("name", e.target.value)
                 }
                 className="border p-2 rounded w-full"
               />
@@ -156,9 +144,9 @@ const handleMonsterClick = (monsterId) => {
               Size:{" "}
               <input
                 type="text"
-                value={modalData.size || ""}
+                value={pageData.size || ""}
                 onChange={(e) =>
-                  handleModalDataChange("size", e.target.value)
+                  handleMonsterDataChange("size", e.target.value)
                 }
                 className="border p-2 rounded w-full"
               />
@@ -167,21 +155,21 @@ const handleMonsterClick = (monsterId) => {
               Type:{" "}
               <input
                 type="text"
-                value={modalData.type || ""}
+                value={pageData.type || ""}
                 onChange={(e) =>
-                  handleModalDataChange("type", e.target.value)
+                  handleMonsterDataChange("type", e.target.value)
                 }
                 className="border p-2 rounded w-full"
               />
             </p>
             <button
-              onClick={saveModalData}
+              onClick={saveMonsterData}
               className="bg-green-500 text-white px-4 py-2 rounded"
             >
               Save
             </button>
             <button
-              onClick={closeModal}
+              onClick={closeEditor}
               className="bg-red-500 text-white px-4 py-2 rounded ml-2"
             >
               Close
