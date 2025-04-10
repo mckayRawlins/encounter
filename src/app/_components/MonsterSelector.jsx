@@ -47,12 +47,24 @@ export default function MonsterSelector({ monsters }) {
 
         const data = await response.json();
 
-        const newMonster = {
-          ...data,
-          location: pageEncounter.location, //
-          id: Date.now(), // Unique ID for the monster
-          index: monsters.length + 1, // Incremental index for display
-        };
+
+        // Preprocess proficiencies into a string
+         const proficienciesString = data.proficiencies
+         ? data.proficiencies
+     .map(
+       (prof) =>
+         `${prof.proficiency.name} +${prof.value}` // Format each proficiency
+     )
+     .join(", ") // Join them with commas
+ : "";
+
+const newMonster = {
+ ...data,
+ location: pageEncounter.location, // Assign the current encounter's location
+ id: Date.now(), // Unique ID for the monster
+ index: monsters.length + 1, // Incremental index for display
+ proficienciesString, // Add the preprocessed proficiencies string
+};
 
         const updatedMonsters = [...selectedMonsters, newMonster];
         setSelectedMonsters(updatedMonsters);
@@ -295,16 +307,30 @@ export default function MonsterSelector({ monsters }) {
   />
 </p>
 <p>
-  Profiency:{" "}
+  Profiency Bonus:{" "}
   <input
     type="text"
-    value={pageData.proficiencies || ""}
+    value={pageData.proficiency_bonus || ""}
     onChange={(e) =>
-      handleMonsterDataChange("charisma", e.target.value)
+      handleMonsterDataChange("proficiency_bonus", e.target.value)
     }
     className="border p-2 rounded w-full"
   />
 </p>
+<p>
+    Proficiencies:{" "}
+    <input
+    type="text"
+      value={pageData.proficienciesString || ""}
+      onChange={(e) => {
+       
+
+        handleMonsterDataChange("proficienciesString", e.target.value);
+      }}
+      className="border p-2 rounded w-full"
+    />
+  </p>
+            
             
             <button
               onClick={saveMonsterData}
