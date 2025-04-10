@@ -174,6 +174,138 @@ export default function MonsterSelector({ monsters }) {
                 className="border p-2 rounded w-full"
               />
             </p>
+            <p>
+              Alignment :{" "}
+              <input
+                type="text"
+                value={pageData.alignment || ""}
+                onChange={(e) =>
+                  handleMonsterDataChange("alignment", e.target.value)
+                }
+                className="border p-2 rounded w-full"
+              />
+            </p>
+            <p>
+              Armor Class :{" "}
+              <input
+                type="text"
+                value={pageData.armor_class[0].value || ""}
+                onChange={(e) =>
+                  handleMonsterDataChange("armor_class", e.target.value)
+                }
+                className="border p-2 rounded w-full"
+              />
+            </p>
+            <p>
+              Hit Points :{" "}
+              <input
+                type="text"
+                value={pageData.hit_points || ""}
+                onChange={(e) =>
+                  handleMonsterDataChange("hit_points", e.target.value)
+                }
+                className="border p-2 rounded w-full"
+              />
+            </p>
+            <p>
+  Speed:{" "}
+  <input
+    type="text"
+    value={
+      pageData.speed.fly
+        ? `walk ${pageData.speed.walk}, fly ${pageData.speed.fly}`
+        : `walk ${pageData.speed.walk}`
+    }
+    onChange={(e) =>
+      handleMonsterDataChange("speed", e.target.value)
+    }
+    className="border p-2 rounded w-full"
+  />
+</p>
+<p>
+  STR:{" "}
+  <input
+    type="text"
+    value={
+      pageData.strength || ""
+    }
+    onChange={(e) =>
+      handleMonsterDataChange("strength", e.target.value)
+    }
+    className="border p-2 rounded w-full"
+  />
+</p>
+<p>
+  DEX:{" "}
+  <input
+    type="text"
+    value={pageData.dexterity || ""}
+    onChange={(e) =>
+      handleMonsterDataChange("dexterity", e.target.value)
+    }
+    className="border p-2 rounded w-full"
+  />
+</p>
+
+<p>
+  CON:{" "}
+  <input
+    type="text"
+    value={pageData.constitution || ""}
+    onChange={(e) =>
+      handleMonsterDataChange("constitution", e.target.value)
+    }
+    className="border p-2 rounded w-full"
+  />
+</p>
+
+<p>
+  INT:{" "}
+  <input
+    type="text"
+    value={pageData.intelligence || ""}
+    onChange={(e) =>
+      handleMonsterDataChange("intelligence", e.target.value)
+    }
+    className="border p-2 rounded w-full"
+  />
+</p>
+
+<p>
+  WIS:{" "}
+  <input
+    type="text"
+    value={pageData.wisdom || ""}
+    onChange={(e) =>
+      handleMonsterDataChange("wisdom", e.target.value)
+    }
+    className="border p-2 rounded w-full"
+  />
+</p>
+
+<p>
+  CHA:{" "}
+  <input
+    type="text"
+    value={pageData.charisma || ""}
+    onChange={(e) =>
+      handleMonsterDataChange("charisma", e.target.value)
+    }
+    className="border p-2 rounded w-full"
+  />
+</p>
+<p>
+  Profiency:{" "}
+  <input
+    type="text"
+    value={pageData.proficiencies || ""}
+    onChange={(e) =>
+      handleMonsterDataChange("charisma", e.target.value)
+    }
+    className="border p-2 rounded w-full"
+  />
+</p>
+            
             <button
               onClick={saveMonsterData}
               className="bg-green-500 text-white px-4 py-2 rounded"
