@@ -17,7 +17,7 @@ export default function EncounterPage() {
 
   return (
     <div>
-      <h1 className="bg-slate-200 p-3 rounded-t-lg">
+      <h1 className="bg-slate-600 text-white p-3 rounded-t-lg">
         {pageEncounter.location.toUpperCase()}
       </h1>
       <p>
