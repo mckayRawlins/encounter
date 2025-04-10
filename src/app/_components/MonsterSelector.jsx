@@ -10,6 +10,13 @@ export default function MonsterSelector({ monsters }) {
   const [pageData, setPageData] = useState(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
+  const { encounter } = useParams();
+  const [encounters, setEncounters] = useLocalStorage("encounters", []);
+  const decodedEncounter = encounter ? decodeURIComponent(encounter) : "";
+  const pageEncounter = encounters?.find(
+    (e) => e.location.toLowerCase() === decodedEncounter.toLowerCase()
+  );
+
   // Load saved monsters on mount
   useEffect(() => {
     const stored = localStorage.getItem("monsters");
@@ -121,13 +128,12 @@ export default function MonsterSelector({ monsters }) {
           {selectedMonsters
             .filter((monster) => monster.location === pageEncounter.location)
             .map((monster) => (
-              <li key={monster.id}>
-                <span
-                  onClick={() => handleMonsterClick(monster.id)}
-                  className="cursor-pointer text-blue-500 underline"
-                >
-                  {monster.name}
-                </span>
+              <li
+                key={monster.id}
+                onClick={() => handleMonsterClick(monster.id)}
+                className="cursor-pointer bg-gray-100 drop-shadow-md p-2 m-3 w-1/5 hover:bg-gray-50"
+              >
+                <span>{monster.name}</span>
               </li>
             ))}
         </ul>
