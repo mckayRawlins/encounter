@@ -131,7 +131,7 @@ export default function MonsterSelector({ monsters }) {
               <li
                 key={monster.id}
                 onClick={() => handleMonsterClick(monster.id)}
-                className="cursor-pointer bg-gray-100 drop-shadow-md p-2 m-3 w-1/5 hover:bg-gray-50"
+                className="cursor-pointer text-white bg-slate-600 drop-shadow-md p-2 m-3 w-1/5 hover:bg-slate-500"
               >
                 <span>{monster.name}</span>
               </li>
