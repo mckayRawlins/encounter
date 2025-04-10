@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import useLocalStorage from "@/app/hooks/useLocalStorage";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "next/navigation";
+import { EncounterContext } from "../context/EncounterProvider";
 
 export default function MonsterSelector({ monsters }) {
   const [selectedMonsterIndex, setSelectedMonsterIndex] = useState("");
@@ -11,7 +11,7 @@ export default function MonsterSelector({ monsters }) {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   const { encounter } = useParams();
-  const [encounters, setEncounters] = useLocalStorage("encounters", []);
+  const { encounters } = useContext(EncounterContext);
   const decodedEncounter = encounter ? decodeURIComponent(encounter) : "";
   const pageEncounter = encounters?.find(
     (e) => e.location.toLowerCase() === decodedEncounter.toLowerCase()

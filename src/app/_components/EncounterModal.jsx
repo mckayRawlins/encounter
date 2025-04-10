@@ -1,6 +1,8 @@
-import useLocalStorage from "../hooks/useLocalStorage";
+"use client";
+
+import { EncounterContext } from "../context/EncounterProvider";
 import Modal from "./Modal";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function EncounterModal({
   isOpen,
@@ -11,7 +13,7 @@ export default function EncounterModal({
 }) {
   const [location, setLocation] = useState("");
   const [notes, setNotes] = useState("");
-  const [encounters] = useLocalStorage("encounters");
+  const { encounters } = useContext(EncounterContext);
 
   const handleLocationInput = (event) => {
     const { value } = event.target;
