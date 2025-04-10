@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import useLocalStorage from "@/app/hooks/useLocalStorage";
+import { useParams } from "next/navigation";
 
 export default function MonsterSelector({ monsters }) {
   const [selectedMonsterIndex, setSelectedMonsterIndex] = useState("");
@@ -8,7 +10,16 @@ export default function MonsterSelector({ monsters }) {
   const [modalData, setModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  //Check Encounter
 
+  const { encounter } = useParams();
+  const [encounters, setEncounters] = useLocalStorage("encounters", []);
+
+  const decodedEncounter = encounter ? decodeURIComponent(encounter) : "";
+
+  const pageEncounter = encounters?.find(
+    (e) => e.location.toLowerCase() === decodedEncounter.toLowerCase()
+  );
   
 
   // Load saved monsters on mount
@@ -51,7 +62,8 @@ export default function MonsterSelector({ monsters }) {
       
       const newMonster = {
         ...data,
-        id: Date.now(), // Unique ID for local storage
+        location: pageEncounter.location, //
+        id: Date.now(), // Unique ID for the monster 
         index: monsters.length + 1, // Incremental index for display
       };
 
@@ -104,6 +116,7 @@ const handleMonsterClick = (monsterId) => {
   };
 
   return (
+    
     <>
       <div>
         <label>Monsters: </label>
@@ -126,13 +139,13 @@ const handleMonsterClick = (monsterId) => {
 
       {selectedMonsters.length > 0 && (
         <ul>
-          {selectedMonsters.map((monster) => (
+          {selectedMonsters
+          .filter((monster) => monster.location === pageEncounter.location)
+          .map((monster) => (
             <li key={monster.id}>
               <span
-                onClick={() => handleMonsterClick(monster.id)}
-                className="cursor-pointer text-blue-500 underline"
-              >
-                {monster.name}
+                onClick={() => handleMonsterClick(monster.id)} className="cursor-pointer text-blue-500 underline">
+                 { monster.name} 
               </span>
             </li>
           ))}
