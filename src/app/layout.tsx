@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Image from "next/image";
 import UserProvider from "./context/UserProvider";
 import EncounterProvider from "./context/EncounterProvider";
 
@@ -33,10 +34,17 @@ export default function RootLayout({
         <UserProvider>
           <EncounterProvider>
             <header className="flex bg-black">
-              <Link href="/" className="text-white p-3">
+              <Image src="/logo.png" alt="Logo" width={50} height={50} />
+              <Link href="/" className="text-white p-3 hover:bg-gray-800">
                 Home
               </Link>
-              <Link href="/about" className="text-white p-3">
+              <Link
+                href="/encounters"
+                className="text-white p-3 hover:bg-gray-800"
+              >
+                Encounters
+              </Link>
+              <Link href="/about" className="text-white p-3 hover:bg-gray-800">
                 About
               </Link>
             </header>
