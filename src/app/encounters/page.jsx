@@ -19,12 +19,12 @@ export default function Page() {
     setSelectedEncounter({});
   }
 
-  function updateEncounter(id, location, notes, monsters) {
+  function updateEncounter(id, location, notes) {
     if (!id) return;
     setEncounters(
       encounters.map((encounter) => {
         if (encounter.id === id) {
-          return { id, location, notes, monsters };
+          return { ...encounter, location, notes };
         }
         return encounter;
       })
@@ -38,6 +38,7 @@ export default function Page() {
         id: Date.now(),
         location,
         notes,
+        monsters: [],
       },
     ]);
   }

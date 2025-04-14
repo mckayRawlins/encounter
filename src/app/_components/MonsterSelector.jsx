@@ -5,6 +5,7 @@ import { EncounterContext } from "../context/EncounterProvider";
 import MonsterForm from "./MonsterForm";
 
 export default function MonsterSelector({ monsters }) {
+  console.log(monsters);
   const [selectedMonsterIndex, setSelectedMonsterIndex] = useState("");
   const [selectedMonsters, setSelectedMonsters] = useState([]);
 
@@ -12,7 +13,7 @@ export default function MonsterSelector({ monsters }) {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   const { encounter } = useParams();
-  const { encounters } = useContext(EncounterContext);
+  const { encounters, setEncounters } = useContext(EncounterContext);
   const decodedEncounter = encounter ? decodeURIComponent(encounter) : "";
   const pageEncounter = encounters?.find(
     (e) => e.location.toLowerCase() === decodedEncounter.toLowerCase()
@@ -35,49 +36,43 @@ export default function MonsterSelector({ monsters }) {
   const handleAddMonster = async () => {
     if (!selectedMonsterIndex) return;
 
-    if (
-      !selectedMonsters.some(
-        (monster) => monster.index === selectedMonsterIndex
-      )
-    ) {
-      try {
-        // Fetch the full monster data from the API
-        const response = await fetch(
-          `https://www.dnd5eapi.co/api/monsters/${selectedMonsterIndex}`
-        );
+    try {
+      // Fetch the full monster data from the API
+      const response = await fetch(
+        `https://www.dnd5eapi.co/api/monsters/${selectedMonsterIndex}`
+      );
 
-        const data = await response.json();
+      const data = await response.json();
 
-        const newMonster = {
-          ...data,
-          location: pageEncounter.location, //
-          id: Date.now(), // Unique ID for the monster
-          index: monsters.length + 1, // Incremental index for display
-        };
+      const newMonster = {
+        ...data,
+        id: Date.now(), // Unique ID for the monster
+      };
 
-        const updatedMonsters = [...selectedMonsters, newMonster];
-        setSelectedMonsters(updatedMonsters);
+      setEncounters((prev) =>
+        prev.map((encounter) => {
+          if (encounter.location === pageEncounter.location) {
+            return {
+              ...encounter,
+              monsters: [...encounter.monsters, newMonster],
+            };
+          }
+        })
+      );
 
-        // Save all monsters to local storage as a single object
-        const current = JSON.parse(localStorage.getItem("monsters") || "{}");
+      /* const current = JSON.parse(localStorage.getItem("monsters") || "{}");
         current[newMonster.id] = newMonster;
-        localStorage.setItem("monsters", JSON.stringify(current));
+        localStorage.setItem("monsters", JSON.stringify(current)); */
 
-        setSelectedMonsterIndex("");
-      } catch (error) {
-        console.error("Error fetching monster data:", error);
-      }
+      setSelectedMonsterIndex("");
+    } catch (error) {
+      console.error("Error fetching monster data:", error);
     }
   };
 
-  const handleMonsterClick = (monsterId) => {
-    const savedMonster = selectedMonsters.find(
-      (monster) => monster.id === monsterId
-    );
-    if (savedMonster) {
-      setPageData(savedMonster);
-      setIsEditorOpen(true);
-    }
+  const handleMonsterClick = (monster) => {
+    setPageData(monster);
+    setIsEditorOpen(true);
   };
 
   const handleMonsterDataChange = (field, value) => {
@@ -89,10 +84,20 @@ export default function MonsterSelector({ monsters }) {
 
   const saveMonsterData = () => {
     if (pageData) {
-      const current = JSON.parse(localStorage.getItem("monsters") || "{}");
-      current[pageData.id] = pageData;
-      localStorage.setItem("monsters", JSON.stringify(current));
-      setSelectedMonsters(Object.values(current));
+      setEncounters((prev) =>
+        prev.map((encounter) => {
+          if (encounter.location === pageEncounter.location) {
+            return {
+              ...encounter,
+              monsters: encounter.monsters.map((monster) => {
+                if (monster.id === pageData.id) {
+                  return { ...monster, ...pageData };
+                }
+              }),
+            };
+          }
+        })
+      );
       setIsEditorOpen(false);
       setPageData(null);
     }
@@ -123,19 +128,17 @@ export default function MonsterSelector({ monsters }) {
           Add
         </button>
 
-        {selectedMonsters.length > 0 && (
+        {pageEncounter?.monsters.length > 0 && (
           <ul>
-            {selectedMonsters
-              .filter((monster) => monster.location === pageEncounter.location)
-              .map((monster) => (
-                <li
-                  key={monster.id}
-                  onClick={() => handleMonsterClick(monster.id)}
-                  className="cursor-pointer text-white bg-slate-600 drop-shadow-md p-2 m-3 w-1/3 hover:bg-slate-500"
-                >
-                  <span>{monster.name}</span>
-                </li>
-              ))}
+            {pageEncounter.monsters.map((monster) => (
+              <li
+                key={monster.id}
+                onClick={() => handleMonsterClick(monster)}
+                className="cursor-pointer text-white bg-slate-600 drop-shadow-md p-2 m-3 w-1/3 hover:bg-slate-500"
+              >
+                <span>{monster.name}</span>
+              </li>
+            ))}
           </ul>
         )}
       </div>

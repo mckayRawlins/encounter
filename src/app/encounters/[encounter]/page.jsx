@@ -17,9 +17,7 @@ export default async function Page() {
     <div className="p-5">
       <div className="drop-shadow-md">
         <EncounterPage />
-        <div>
-          <MonsterSelector monsters={monsters} />
-        </div>
+        <div>{/* <MonsterSelector monsters={monsters} /> */}</div>
       </div>
     </div>
   );

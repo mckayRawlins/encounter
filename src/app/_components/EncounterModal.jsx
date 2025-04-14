@@ -32,7 +32,7 @@ export default function EncounterModal({
       (encounter) => encounter.location === location
     );
 
-    if (foundEncounter) {
+    if (foundEncounter && !encounter.id) {
       console.log(`${location} already exists`);
       return;
     }
