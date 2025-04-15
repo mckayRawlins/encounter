@@ -1,6 +1,7 @@
 "use client";
 
 import { EncounterContext } from "@/app/context/EncounterProvider";
+//import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useContext } from "react";
 

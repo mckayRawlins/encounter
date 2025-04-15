@@ -72,7 +72,6 @@ const fields = [
 ];
 
 export default function MonsterForm({ handleChange, data }) {
-  console.log(data);
   return (
     <div className="grid grid-cols-2 gap-4 p-4 bg-slate-600 text-white">
       {fields.map((field) => {

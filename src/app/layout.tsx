@@ -33,8 +33,8 @@ export default function RootLayout({
       >
         <UserProvider>
           <EncounterProvider>
-            <header className="flex bg-black">
-              <Image src="/logo.png" alt="Logo" width={50} height={50} />
+            <header className="flex bg-black aboslute">
+              <Image src="/dnd_logo.png" alt="Logo" width={100} height={50} />
               <Link href="/" className="text-white p-3 hover:bg-gray-800">
                 Home
               </Link>

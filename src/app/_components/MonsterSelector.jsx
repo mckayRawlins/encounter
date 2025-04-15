@@ -5,7 +5,6 @@ import { EncounterContext } from "../context/EncounterProvider";
 import MonsterForm from "./MonsterForm";
 
 export default function MonsterSelector({ monsters }) {
-  console.log(monsters);
   const [selectedMonsterIndex, setSelectedMonsterIndex] = useState("");
   const [selectedMonsters, setSelectedMonsters] = useState([]);
 
@@ -82,6 +81,28 @@ export default function MonsterSelector({ monsters }) {
     }));
   };
 
+  const handleDeleteMonster = (monsterId) => {
+    console.log("delete", monsterId);
+    setEncounters((prev) => {
+      return prev.map((encounter) => {
+        if (encounter.location === pageEncounter.location) {
+          return {
+            ...encounter,
+            monsters: encounter.monsters.filter(
+              (monster) => monster.id !== monsterId
+            ),
+          };
+        }
+        return encounter;
+      });
+    });
+
+    if (pageData && pageData.id === monsterId) {
+      setIsEditorOpen(false);
+      setPageData(null);
+    }
+  };
+
   const saveMonsterData = () => {
     if (pageData) {
       setEncounters((prev) =>
@@ -123,7 +144,7 @@ export default function MonsterSelector({ monsters }) {
         <button
           onClick={handleAddMonster}
           disabled={!selectedMonsterIndex}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:cursor-pointer disabled:bg-blue-300 disabled:cursor-not-allowed"
+          className="bg-gray-600 text-white px-4 py-2 ml-3 rounded hover:cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
         >
           Add
         </button>
@@ -133,10 +154,20 @@ export default function MonsterSelector({ monsters }) {
             {pageEncounter.monsters.map((monster) => (
               <li
                 key={monster.id}
-                onClick={() => handleMonsterClick(monster)}
-                className="cursor-pointer text-white bg-slate-600 drop-shadow-md p-2 m-3 w-1/3 hover:bg-slate-500"
+                className="flex justify-between text-white bg-slate-600 drop-shadow-md p-3 m-3 w-1/3 rounded-md"
               >
-                <span>{monster.name}</span>
+                <span
+                  onClick={() => handleMonsterClick(monster)}
+                  className="cursor-pointer"
+                >
+                  {monster.name}
+                </span>
+                <button
+                  onClick={() => handleDeleteMonster(monster.id)}
+                  className="rounded-full bg-slate-500 px-2 hover:cursor-pointer"
+                >
+                  &times;
+                </button>
               </li>
             ))}
           </ul>
@@ -156,13 +187,13 @@ export default function MonsterSelector({ monsters }) {
           <div>
             <button
               onClick={saveMonsterData}
-              className="bg-green-500 text-white px-4 py-2 rounded"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:cursor-pointer"
             >
               Save
             </button>
             <button
               onClick={closeEditor}
-              className="bg-red-500 text-white px-4 py-2 rounded ml-2"
+              className="bg-red-500 text-white px-4 py-2 rounded ml-2 hover:cursor-pointer"
             >
               Close
             </button>

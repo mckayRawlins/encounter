@@ -68,8 +68,8 @@ export default function Page() {
       ))}
       <button
         onClick={openModal}
-        className="absolute bottom-20 right-10 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4
-         border-blue-700 hover:border-blue-500 hover:cursor-pointer rounded"
+        className="absolute bottom-20 right-10 bg-gray-500 hover:bg-gray-400 text-white font-bold py-2 px-4 border-b-4
+         border-gray-700 hover:border-gray-500 hover:cursor-pointer rounded"
       >
         add new encounter
       </button>
