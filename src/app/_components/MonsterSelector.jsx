@@ -97,18 +97,6 @@ export default function MonsterSelector({ monsters }) {
             .join(", ") // Format each key-value pair
         : ""; // Default to an empty string if no speed data exists
 
-      const newMonster = {
-        ...data,
-        location: pageEncounter.location, // Assign the current encounter's location
-        id: Date.now(), // Unique ID for the monster
-        index: monsters.length + 1, // Incremental index for display
-        proficienciesString, // Add the preprocessed proficiencies string
-        actionString, // Add the preprocessed actions string
-        condition_immunitiesString, // Add the preprocessed condition immunities string
-        speedString, // Add the preprocessed speed string
-        sensesString, // Add the preprocessed senses string
-      };
-
       /*     // Remove unnecessary properties from the monster data
     delete newMonster.proficiencies;
     delete newMonster.actions;
@@ -118,6 +106,31 @@ export default function MonsterSelector({ monsters }) {
     delete newMonster.condition_immunities;
     delete newMonster.speed;
     delete newMonster.senses; */
+
+      const newMonster = {
+        ...data,
+        id: Date.now(), // Unique ID for the monster
+        proficienciesString, // Add the preprocessed proficiencies string
+        actionString, // Add the preprocessed actions string
+        condition_immunitiesString, // Add the preprocessed condition immunities string
+        speedString, // Add the preprocessed speed string
+        sensesString, // Add the preprocessed senses string
+      };
+
+      setEncounters((prev) =>
+        prev.map((encounter) => {
+          if (encounter.location === pageEncounter.location) {
+            return {
+              ...encounter,
+              monsters: [...encounter.monsters, newMonster],
+            };
+          }
+        })
+      );
+
+      /* const current = JSON.parse(localStorage.getItem("monsters") || "{}");
+      current[newMonster.id] = newMonster;
+      localStorage.setItem("monsters", JSON.stringify(current)); */
 
       setSelectedMonsterIndex("");
     } catch (error) {
