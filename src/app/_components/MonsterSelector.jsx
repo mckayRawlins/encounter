@@ -12,7 +12,7 @@ export default function MonsterSelector({ monsters }) {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   const { encounter } = useParams();
-  const { encounters } = useContext(EncounterContext);
+  const { encounters, setEncounters } = useContext(EncounterContext);
   const decodedEncounter = encounter ? decodeURIComponent(encounter) : "";
   const pageEncounter = encounters?.find(
     (e) => e.location.toLowerCase() === decodedEncounter.toLowerCase()
@@ -35,89 +35,81 @@ export default function MonsterSelector({ monsters }) {
   const handleAddMonster = async () => {
     if (!selectedMonsterIndex) return;
 
-    if (
-      !selectedMonsters.some(
-        (monster) => monster.index === selectedMonsterIndex
-      )
-    ) {
-      try {
-        // Fetch the full monster data from the API
-        const response = await fetch(
-          `https://www.dnd5eapi.co/api/monsters/${selectedMonsterIndex}`
-        );
+    try {
+      // Fetch the full monster data from the API
+      const response = await fetch(
+        `https://www.dnd5eapi.co/api/monsters/${selectedMonsterIndex}`
+      );
 
-        const data = await response.json();
+      const data = await response.json();
 
+      // Preprocess proficiencies into a string
+      const proficienciesString = data.proficiencies
+        ? data.proficiencies
+            .map(
+              (prof) => `${prof.proficiency.name} +${prof.value}` // Format each proficiency
+            )
+            .join(", ") // Join them with commas
+        : "";
 
-        // Preprocess proficiencies into a string
-         const proficienciesString = data.proficiencies
-         ? data.proficiencies
-     .map(
-       (prof) =>
-         `${prof.proficiency.name} +${prof.value}` // Format each proficiency
-     )
-     .join(", ") // Join them with commas
- : "";
+      // Preprocess Actions and Legendary Actions into a string
+      const actionString = [
+        ...(data.actions
+          ? data.actions.map((action) => `${action.name}: ${action.desc}`)
+          : []), // Format each action
+        ...(data.legendary_actions
+          ? data.legendary_actions.map(
+              (legendaryAction) =>
+                `Legendary Actions - ${legendaryAction.name}: ${legendaryAction.desc}`
+            )
+          : []), // Format each legendary action
+        ...(data.reactions
+          ? data.reactions.map(
+              (reaction) => `Reactions - ${reaction.name}: ${reaction.desc}`
+            )
+          : []), // Format each reaction
+        ...(data.special_abilities
+          ? data.special_abilities.map(
+              (specialAbility) =>
+                `Special Abilities - ${specialAbility.name}: ${specialAbility.desc} ${specialAbility.usage?.times} ${specialAbility.usage?.type}`
+            )
+          : []), // Format each special ability
+      ].join(", "); // Combine all actions, legendary actions, reactions, and special abilities with commas
 
- // Preprocess Actions and Legendary Actions into a string
- const actionString = [
-  ...(data.actions
-    ? data.actions.map((action) => `${action.name}: ${action.desc}`)
-    : []), // Format each action
-  ...(data.legendary_actions
-    ? data.legendary_actions.map(
-        (legendaryAction) =>
-          `Legendary Actions - ${legendaryAction.name}: ${legendaryAction.desc}`
-      )
-    : []), // Format each legendary action
-  ...(data.reactions
-    ? data.reactions.map(
-        (reaction) => `Reactions - ${reaction.name}: ${reaction.desc}`
-      )
-    : []), // Format each reaction
-  ...(data.special_abilities
-    ? data.special_abilities.map(
-        (specialAbility) =>
-          `Special Abilities - ${specialAbility.name}: ${specialAbility.desc} ${specialAbility.usage?.times} ${specialAbility.usage?.type}`
-      )
-    : []), // Format each special ability
-].join(", "); // Combine all actions, legendary actions, reactions, and special abilities with commas
+      const condition_immunitiesString = data.condition_immunities
+        ? data.condition_immunities
+            .map((immunity) => `${immunity.name}`) // Map each immunity to its name
+            .join(", ") // Join them with commas
+        : ""; // Default to an empty string if no condition immunities exist
 
-const condition_immunitiesString = data.condition_immunities
-  ? data.condition_immunities
-      .map((immunity) => `${immunity.name}`) // Map each immunity to its name
-      .join(", ") // Join them with commas
-  : ""; // Default to an empty string if no condition immunities exist
+      const speedString = data.speed
+        ? Object.entries(data.speed)
+            .map(([type, value]) => `${type} ${value}`) // Format each key-value pair
+            .join(", ") // Join them with commas
+        : ""; // Default to an empty string if no speed data exists
 
-  const speedString = data.speed
-  ? Object.entries(data.speed)
-      .map(([type, value]) => `${type} ${value}`) // Format each key-value pair
-      .join(", ") // Join them with commas
-  : ""; // Default to an empty string if no speed data exists
+      const sensesString = data.senses
+        ? Object.entries(data.senses)
+            .map(
+              ([type, value]) =>
+                `${type.replace(/_/g, " ")} ${String(value).replace(/\./g, "")}`
+            )
+            .join(", ") // Format each key-value pair
+        : ""; // Default to an empty string if no speed data exists
 
-  const sensesString = data.senses
-  ? Object.entries(data.senses)
-      .map(([type, value]) => `${type.replace(/_/g, " ")} ${String(value).replace(/\./g, "")}`)
-      .join(", ") // Format each key-value pair
-  : ""; // Default to an empty string if no speed data exists
+      const newMonster = {
+        ...data,
+        location: pageEncounter.location, // Assign the current encounter's location
+        id: Date.now(), // Unique ID for the monster
+        index: monsters.length + 1, // Incremental index for display
+        proficienciesString, // Add the preprocessed proficiencies string
+        actionString, // Add the preprocessed actions string
+        condition_immunitiesString, // Add the preprocessed condition immunities string
+        speedString, // Add the preprocessed speed string
+        sensesString, // Add the preprocessed senses string
+      };
 
-
- 
-
-const newMonster = {
- ...data,
- location: pageEncounter.location, // Assign the current encounter's location
- id: Date.now(), // Unique ID for the monster
- index: monsters.length + 1, // Incremental index for display
- proficienciesString, // Add the preprocessed proficiencies string
-actionString, // Add the preprocessed actions string
-condition_immunitiesString, // Add the preprocessed condition immunities string
-speedString, // Add the preprocessed speed string 
-sensesString // Add the preprocessed senses string
-  
-  };
-  
-  /*     // Remove unnecessary properties from the monster data
+      /*     // Remove unnecessary properties from the monster data
     delete newMonster.proficiencies;
     delete newMonster.actions;
     delete newMonster.legendary_actions;
@@ -126,30 +118,16 @@ sensesString // Add the preprocessed senses string
     delete newMonster.condition_immunities;
     delete newMonster.speed;
     delete newMonster.senses; */
-        
-        const updatedMonsters = [...selectedMonsters, newMonster];
-        setSelectedMonsters(updatedMonsters);
 
-        // Save all monsters to local storage as a single object
-        const current = JSON.parse(localStorage.getItem("monsters") || "{}");
-        current[newMonster.id] = newMonster;
-        localStorage.setItem("monsters", JSON.stringify(current));
-
-        setSelectedMonsterIndex("");
-      } catch (error) {
-        console.error("Error fetching monster data:", error);
-      }
+      setSelectedMonsterIndex("");
+    } catch (error) {
+      console.error("Error fetching monster data:", error);
     }
   };
 
-  const handleMonsterClick = (monsterId) => {
-    const savedMonster = selectedMonsters.find(
-      (monster) => monster.id === monsterId
-    );
-    if (savedMonster) {
-      setPageData(savedMonster);
-      setIsEditorOpen(true);
-    }
+  const handleMonsterClick = (monster) => {
+    setPageData(monster);
+    setIsEditorOpen(true);
   };
 
   const handleMonsterDataChange = (field, value) => {
@@ -159,12 +137,44 @@ sensesString // Add the preprocessed senses string
     }));
   };
 
+  const handleDeleteMonster = (monsterId) => {
+    console.log("delete", monsterId);
+    setEncounters((prev) => {
+      return prev.map((encounter) => {
+        if (encounter.location === pageEncounter.location) {
+          return {
+            ...encounter,
+            monsters: encounter.monsters.filter(
+              (monster) => monster.id !== monsterId
+            ),
+          };
+        }
+        return encounter;
+      });
+    });
+
+    if (pageData && pageData.id === monsterId) {
+      setIsEditorOpen(false);
+      setPageData(null);
+    }
+  };
+
   const saveMonsterData = () => {
     if (pageData) {
-      const current = JSON.parse(localStorage.getItem("monsters") || "{}");
-      current[pageData.id] = pageData;
-      localStorage.setItem("monsters", JSON.stringify(current));
-      setSelectedMonsters(Object.values(current));
+      setEncounters((prev) =>
+        prev.map((encounter) => {
+          if (encounter.location === pageEncounter.location) {
+            return {
+              ...encounter,
+              monsters: encounter.monsters.map((monster) => {
+                if (monster.id === pageData.id) {
+                  return { ...monster, ...pageData };
+                }
+              }),
+            };
+          }
+        })
+      );
       setIsEditorOpen(false);
       setPageData(null);
     }
@@ -190,24 +200,32 @@ sensesString // Add the preprocessed senses string
         <button
           onClick={handleAddMonster}
           disabled={!selectedMonsterIndex}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:cursor-pointer disabled:bg-blue-300 disabled:cursor-not-allowed"
+          className="bg-gray-600 text-white px-4 py-2 ml-3 rounded hover:cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
         >
           Add
         </button>
 
-        {selectedMonsters.length > 0 && (
+        {pageEncounter?.monsters.length > 0 && (
           <ul>
-            {selectedMonsters
-              .filter((monster) => monster.location === pageEncounter.location)
-              .map((monster) => (
-                <li
-                  key={monster.id}
-                  onClick={() => handleMonsterClick(monster.id)}
-                  className="cursor-pointer text-white bg-slate-600 drop-shadow-md p-2 m-3 w-1/3 hover:bg-slate-500"
+            {pageEncounter.monsters.map((monster) => (
+              <li
+                key={monster.id}
+                className="flex justify-between text-white bg-slate-600 drop-shadow-md p-3 m-3 w-1/3 rounded-md"
+              >
+                <span
+                  onClick={() => handleMonsterClick(monster)}
+                  className="cursor-pointer"
                 >
-                  <span>{monster.name}</span>
-                </li>
-              ))}
+                  {monster.name}
+                </span>
+                <button
+                  onClick={() => handleDeleteMonster(monster.id)}
+                  className="rounded-full bg-slate-500 px-2 hover:cursor-pointer"
+                >
+                  &times;
+                </button>
+              </li>
+            ))}
           </ul>
         )}
       </div>
@@ -225,13 +243,13 @@ sensesString // Add the preprocessed senses string
           <div>
             <button
               onClick={saveMonsterData}
-              className="bg-green-500 text-white px-4 py-2 rounded"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:cursor-pointer"
             >
               Save
             </button>
             <button
               onClick={closeEditor}
-              className="bg-red-500 text-white px-4 py-2 rounded ml-2"
+              className="bg-red-500 text-white px-4 py-2 rounded ml-2 hover:cursor-pointer"
             >
               Close
             </button>

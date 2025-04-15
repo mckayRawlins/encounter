@@ -15,7 +15,6 @@ export default function useLocalStorage(key, initialValue) {
     if (typeof window !== "undefined") {
       localStorage.setItem(key, JSON.stringify(state));
     }
-    console.log("testing useEffect", state);
   }, [key, state]);
 
   return [state, setState];

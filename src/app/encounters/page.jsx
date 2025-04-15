@@ -19,12 +19,12 @@ export default function Page() {
     setSelectedEncounter({});
   }
 
-  function updateEncounter(id, location, notes, monsters) {
+  function updateEncounter(id, location, notes) {
     if (!id) return;
     setEncounters(
       encounters.map((encounter) => {
         if (encounter.id === id) {
-          return { id, location, notes, monsters };
+          return { ...encounter, location, notes };
         }
         return encounter;
       })
@@ -38,6 +38,7 @@ export default function Page() {
         id: Date.now(),
         location,
         notes,
+        monsters: [],
       },
     ]);
   }
@@ -67,8 +68,8 @@ export default function Page() {
       ))}
       <button
         onClick={openModal}
-        className="absolute bottom-20 right-10 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4
-         border-blue-700 hover:border-blue-500 hover:cursor-pointer rounded"
+        className="absolute bottom-20 right-10 bg-gray-500 hover:bg-gray-400 text-white font-bold py-2 px-4 border-b-4
+         border-gray-700 hover:border-gray-500 hover:cursor-pointer rounded"
       >
         add new encounter
       </button>
