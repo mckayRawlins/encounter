@@ -59,14 +59,74 @@ export default function MonsterSelector({ monsters }) {
      .join(", ") // Join them with commas
  : "";
 
+ // Preprocess Actions and Legendary Actions into a string
+ const actionString = [
+  ...(data.actions
+    ? data.actions.map((action) => `${action.name}: ${action.desc}`)
+    : []), // Format each action
+  ...(data.legendary_actions
+    ? data.legendary_actions.map(
+        (legendaryAction) =>
+          `Legendary Actions - ${legendaryAction.name}: ${legendaryAction.desc}`
+      )
+    : []), // Format each legendary action
+  ...(data.reactions
+    ? data.reactions.map(
+        (reaction) => `Reactions - ${reaction.name}: ${reaction.desc}`
+      )
+    : []), // Format each reaction
+  ...(data.special_abilities
+    ? data.special_abilities.map(
+        (specialAbility) =>
+          `Special Abilities - ${specialAbility.name}: ${specialAbility.desc} ${specialAbility.usage?.times} ${specialAbility.usage?.type}`
+      )
+    : []), // Format each special ability
+].join(", "); // Combine all actions, legendary actions, reactions, and special abilities with commas
+
+const condition_immunitiesString = data.condition_immunities
+  ? data.condition_immunities
+      .map((immunity) => `${immunity.name}`) // Map each immunity to its name
+      .join(", ") // Join them with commas
+  : ""; // Default to an empty string if no condition immunities exist
+
+  const speedString = data.speed
+  ? Object.entries(data.speed)
+      .map(([type, value]) => `${type} ${value}`) // Format each key-value pair
+      .join(", ") // Join them with commas
+  : ""; // Default to an empty string if no speed data exists
+
+  const sensesString = data.senses
+  ? Object.entries(data.senses)
+      .map(([type, value]) => `${type.replace(/_/g, " ")} ${String(value).replace(/\./g, "")}`)
+      .join(", ") // Format each key-value pair
+  : ""; // Default to an empty string if no speed data exists
+
+
+ 
+
 const newMonster = {
  ...data,
  location: pageEncounter.location, // Assign the current encounter's location
  id: Date.now(), // Unique ID for the monster
  index: monsters.length + 1, // Incremental index for display
  proficienciesString, // Add the preprocessed proficiencies string
-};
-
+actionString, // Add the preprocessed actions string
+condition_immunitiesString, // Add the preprocessed condition immunities string
+speedString, // Add the preprocessed speed string 
+sensesString // Add the preprocessed senses string
+  
+  };
+  
+  /*     // Remove unnecessary properties from the monster data
+    delete newMonster.proficiencies;
+    delete newMonster.actions;
+    delete newMonster.legendary_actions;
+    delete newMonster.reactions;
+    delete newMonster.special_abilities;
+    delete newMonster.condition_immunities;
+    delete newMonster.speed;
+    delete newMonster.senses; */
+        
         const updatedMonsters = [...selectedMonsters, newMonster];
         setSelectedMonsters(updatedMonsters);
 

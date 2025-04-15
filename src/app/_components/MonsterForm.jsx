@@ -1,5 +1,6 @@
 import TextInput from "./TextInput";
 
+
 const fields = [
   {
     name: "name",
@@ -7,32 +8,24 @@ const fields = [
     span: 2,
   },
   {
-    name: "size",
+    name: "hit_points",
     abbr: "",
+    type: "number",
     span: 2,
-  },
-  {
-    name: "type",
-    abbr: "",
-  },
-  {
-    name: "alignment",
-    abbr: "",
   },
   {
     name: "armor_class",
     abbr: "",
+    span: 2,
     type: "first_index",
   },
   {
-    name: "hit_points",
+    name: "proficienciesString",
     abbr: "",
-    type: "number",
+    type: "text",
+    span: 2,
   },
-  /*  {
-    name: "speed",
-    abbr: "",
-  }, */
+  , 
   {
     name: "strength",
     abbr: "STR",
@@ -64,11 +57,66 @@ const fields = [
     type: "number",
   },
   {
-    name: "proficiencies",
+    name: "size",
     abbr: "",
-    type: "select",
+
+  },
+  {
+    name: "type",
+    abbr: "",
+  },
+  {
+    name: "alignment",
+    abbr: "",
+  },
+ 
+ 
+   {
+    name: "speedString",
+    abbr: "",
+  }, 
+  {
+    name: "sensesString",
+    abbr: "",
+    
+  },
+  { name : "damage_vulnerabilities",
+    abbr: "",
+    type: "text",
+    span: 1,
+  },
+  {
+    name: "damage_resistances",
+    abbr: "",
+    type: "text",
+    span: 1,
+  },
+  {
+    name: "damage_immunities",
+    abbr: "",
+    type: "text",
+    span: 1,
+  },
+  {
+    name: "condition_immunitiesString",
+    abbr: "",
+    type: "text",
+    span: 1,
+  },
+  {
+    name: "languages",
+    abbr: "",
+    type: "text",
+    span: 1,
+  },
+  {
+    name: "actionString",
+    abbr: "",
+    type: "text",
     span: 2,
   },
+ 
+
 ];
 
 export default function MonsterForm({ handleChange, data }) {
