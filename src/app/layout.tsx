@@ -47,6 +47,12 @@ export default function RootLayout({
               <Link href="/about" className="text-white p-3 hover:bg-gray-800">
                 About
               </Link>
+              <Link
+                href="/suggestions"
+                className="text-white p-3 hover:bg-gray-800"
+              >
+                Suggestions
+              </Link>
             </header>
             {children}
           </EncounterProvider>

@@ -227,7 +227,7 @@ export default function MonsterSelector({ monsters }) {
               >
                 <span
                   onClick={() => handleMonsterClick(monster)}
-                  className="cursor-pointer"
+                  className="cursor-pointer hover:bg-slate-500 rounded-md"
                 >
                   {monster.name}
                 </span>
