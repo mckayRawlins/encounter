@@ -1,6 +1,5 @@
 import TextInput from "./TextInput";
 
-
 const fields = [
   {
     name: "name",
@@ -20,12 +19,12 @@ const fields = [
     type: "first_index",
   },
   {
-    name: "proficienciesString",
+    name: "proficiencies",
     abbr: "",
     type: "text",
     span: 2,
   },
-  , 
+  ,
   {
     name: "strength",
     abbr: "STR",
@@ -59,7 +58,6 @@ const fields = [
   {
     name: "size",
     abbr: "",
-
   },
   {
     name: "type",
@@ -69,22 +67,16 @@ const fields = [
     name: "alignment",
     abbr: "",
   },
- 
- 
-   {
-    name: "speedString",
-    abbr: "",
-  }, 
+
   {
-    name: "sensesString",
+    name: "speed",
     abbr: "",
-    
   },
-  { name : "damage_vulnerabilities",
+  {
+    name: "senses",
     abbr: "",
-    type: "text",
-    span: 1,
   },
+  { name: "damage_vulnerabilities", abbr: "", type: "text", span: 1 },
   {
     name: "damage_resistances",
     abbr: "",
@@ -98,7 +90,7 @@ const fields = [
     span: 1,
   },
   {
-    name: "condition_immunitiesString",
+    name: "condition_immunities",
     abbr: "",
     type: "text",
     span: 1,
@@ -110,13 +102,11 @@ const fields = [
     span: 1,
   },
   {
-    name: "actionString",
+    name: "action",
     abbr: "",
     type: "text",
     span: 2,
   },
- 
-
 ];
 
 export default function MonsterForm({ handleChange, data }) {

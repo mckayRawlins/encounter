@@ -6,7 +6,6 @@ import MonsterForm from "./MonsterForm";
 
 export default function MonsterSelector({ monsters }) {
   const [selectedMonsterIndex, setSelectedMonsterIndex] = useState("");
-  const [selectedMonsters, setSelectedMonsters] = useState([]);
 
   const [pageData, setPageData] = useState(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
@@ -18,7 +17,7 @@ export default function MonsterSelector({ monsters }) {
     (e) => e.location.toLowerCase() === decodedEncounter.toLowerCase()
   );
 
-  // Load saved monsters on mount
+  /*   // Load saved monsters on mount
   useEffect(() => {
     const stored = localStorage.getItem("monsters");
     if (stored) {
@@ -26,7 +25,7 @@ export default function MonsterSelector({ monsters }) {
       const monsterList = Object.values(parsed);
       setSelectedMonsters(monsterList);
     }
-  }, []);
+  }, []); */
 
   const handleMonsterSelect = (event) => {
     setSelectedMonsterIndex(event.target.value);
@@ -110,11 +109,11 @@ export default function MonsterSelector({ monsters }) {
       const newMonster = {
         ...data,
         id: Date.now(), // Unique ID for the monster
-        proficienciesString, // Add the preprocessed proficiencies string
-        actionString, // Add the preprocessed actions string
-        condition_immunitiesString, // Add the preprocessed condition immunities string
-        speedString, // Add the preprocessed speed string
-        sensesString, // Add the preprocessed senses string
+        proficiencies: proficienciesString, // Add the preprocessed proficiencies string
+        action: actionString, // Add the preprocessed actions string
+        condition_immunities: condition_immunitiesString, // Add the preprocessed condition immunities string
+        speed: speedString, // Add the preprocessed speed string
+        senses: sensesString, // Add the preprocessed senses string
       };
 
       setEncounters((prev) =>
@@ -127,10 +126,6 @@ export default function MonsterSelector({ monsters }) {
           }
         })
       );
-
-      /* const current = JSON.parse(localStorage.getItem("monsters") || "{}");
-      current[newMonster.id] = newMonster;
-      localStorage.setItem("monsters", JSON.stringify(current)); */
 
       setSelectedMonsterIndex("");
     } catch (error) {
