@@ -1,5 +1,6 @@
 import EncounterPage from "./EncounterPage";
 import MonsterSelector from "../../_components/MonsterSelector";
+import Initiative from "../../_components/Initiative";
 
 async function fetchMonsters() {
   const response = await fetch("https://www.dnd5eapi.co/api/monsters");
@@ -19,7 +20,7 @@ export default async function Page() {
         <EncounterPage />
         <div>
           <MonsterSelector monsters={monsters} />
-        </div>
+        </div> <Initiative />
       </div>
     </div>
   );
