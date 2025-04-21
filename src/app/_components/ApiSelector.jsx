@@ -31,7 +31,9 @@ export default function ApiSelector({ title, list, add, remove, apiResource }) {
 
   return (
     <div className="p-5">
-      <h1>{title}: </h1>
+      <h1 className="bg-gray-600 rounded-t-2xl text-white text-center p-3">
+        {title}:{" "}
+      </h1>
       <select
         value={selectedOption}
         onChange={(event) => setSelectedOption(event.target.value)}

@@ -44,6 +44,9 @@ export default function RootLayout({
               >
                 Encounters
               </Link>
+              <Link href="/spells" className="text-white p-3 hover:bg-gray-800">
+                Spells
+              </Link>
               <Link href="/about" className="text-white p-3 hover:bg-gray-800">
                 About
               </Link>
