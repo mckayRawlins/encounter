@@ -4,26 +4,20 @@ const fields = [
   {
     name: "name",
     abbr: "",
-    span: 2,
+    span: 1,
   },
   {
     name: "hit_points",
     abbr: "",
     type: "number",
-    span: 2,
+    span: 1,
   },
   {
     name: "armor_class",
     abbr: "",
-    span: 2,
+    span: 1,
     type: "first_index",
-  },
-  {
-    name: "proficiencies",
-    abbr: "",
-    type: "text",
-    span: 2,
-  },
+  }
   ,
   {
     name: "strength",
@@ -54,6 +48,12 @@ const fields = [
     name: "charisma",
     abbr: "CHA",
     type: "number",
+  },
+  {
+    name: "proficiencies",
+    abbr: "",
+    type: "text",
+    span: 2,
   },
   {
     name: "size",
@@ -111,7 +111,7 @@ const fields = [
 
 export default function MonsterForm({ handleChange, data }) {
   return (
-    <div className="grid grid-cols-2 gap-4 p-4 bg-slate-600 text-white">
+    <div className="grid grid-cols-3 gap-3 p-4 bg-slate-600 text-white">
       {fields.map((field) => {
         switch (field.type) {
           case "first_index":
@@ -141,7 +141,7 @@ export default function MonsterForm({ handleChange, data }) {
                 className={field.span === 2 ? "col-span-2" : ""}
                 key={field.name}
               >
-                <label className="capitalize text-2xl" htmlFor={field.name}>
+                <label className="capitalize text-md" htmlFor={field.name}>
                   {field.abbr ? field.abbr : field.name.replace(/_/g, " ")}:
                 </label>
                 <select
