@@ -20,8 +20,9 @@ export default async function Page() {
         <EncounterPage />
         <div>
           <MonsterSelector monsters={monsters} />
-        </div> <Initiative />
+        </div>
       </div>
+      <Initiative />
     </div>
   );
 }

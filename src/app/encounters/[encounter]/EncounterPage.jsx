@@ -9,6 +9,8 @@ export default function EncounterPage() {
   const { encounter } = useParams();
   const { encounters } = useContext(EncounterContext);
 
+  ///console.log("testing", encounters);
+
   const decodedEncounter = encounter ? decodeURIComponent(encounter) : "";
 
   const pageEncounter = encounters?.find(

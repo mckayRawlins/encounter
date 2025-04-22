@@ -37,7 +37,7 @@ export default function ApiSelector({ title, list, add, remove, apiResource }) {
       <select
         value={selectedOption}
         onChange={(event) => setSelectedOption(event.target.value)}
-        className="border"
+        className="border bg-white"
         disabled={options.length === 0}
       >
         <option value="">--Select {title}--</option>

@@ -116,6 +116,8 @@ export default function MonsterSelector({ monsters }) {
         senses: sensesString, // Add the preprocessed senses string
       };
 
+      console.log("encounters", encounters);
+
       setEncounters((prev) =>
         prev.map((encounter) => {
           if (encounter.location === pageEncounter.location) {
