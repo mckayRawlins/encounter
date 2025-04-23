@@ -45,12 +45,14 @@ export default function MonsterSelector({ monsters }) {
 
       // Preprocess proficiencies into a string
       const proficienciesString = data.proficiencies
-        ? data.proficiencies
-            .map(
-              (prof) => `${prof.proficiency.name} +${prof.value}` // Format each proficiency
-            )
-            .join(", ") // Join them with commas
-        : "";
+      ? data.proficiencies
+          .map((prof) =>
+            `${prof.proficiency.name
+              .replace("Saving Throw: ", "") // Remove "Saving Throw:"
+              .replace("Skill: ", "")} +${prof.value}` // Remove "Skill:"
+          )
+          .join(", ") // Join them with commas
+      : "";
 
       // Preprocess Actions and Legendary Actions into a string
       const actionString = [
