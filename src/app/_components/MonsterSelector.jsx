@@ -13,6 +13,7 @@ export default function MonsterSelector({ monsters }) {
   const { encounter } = useParams();
   const { encounters, setEncounters } = useContext(EncounterContext);
   const decodedEncounter = encounter ? decodeURIComponent(encounter) : "";
+
   const pageEncounter = encounters?.find(
     (e) => e.location.toLowerCase() === decodedEncounter.toLowerCase()
   );
@@ -116,16 +117,16 @@ export default function MonsterSelector({ monsters }) {
         senses: sensesString, // Add the preprocessed senses string
       };
 
-      console.log("encounters", encounters);
-
       setEncounters((prev) =>
         prev.map((encounter) => {
+          console.log("testing from setEncounters: ", encounter);
           if (encounter.location === pageEncounter.location) {
             return {
               ...encounter,
               monsters: [...encounter.monsters, newMonster],
             };
           }
+          return encounter;
         })
       );
 

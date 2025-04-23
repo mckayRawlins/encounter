@@ -14,8 +14,10 @@ export default function EncounterPage() {
   const decodedEncounter = encounter ? decodeURIComponent(encounter) : "";
 
   const pageEncounter = encounters?.find(
-    (e) => e.location.toLowerCase() === decodedEncounter.toLowerCase()
+    (e) => e?.location.toLowerCase() === decodedEncounter.toLowerCase()
   );
+
+  console.log("testing on encounter page ", decodedEncounter);
 
   if (!pageEncounter) return null;
 
