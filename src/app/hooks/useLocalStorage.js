@@ -7,7 +7,7 @@ export default function useLocalStorage(key, initialValue) {
   }
   try {
     savedValue = JSON.parse(savedValue);
-  } catch (error) {}
+  } catch {}
 
   const [state, setState] = useState(savedValue || initialValue);
 
